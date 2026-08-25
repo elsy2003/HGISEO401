@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hwange Human-Wildlife Conflict Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Hwange Human-Wildlife Conflict Dashboard</h1>
+        <p>Spatial analysis of human-wildlife conflict events</p>
+    </header>
+
+    <!-- FILTERS -->
+    <section class="filters">
+
+        <div class="filter">
+            <label for="districtFilter">District</label>
+            <select id="districtFilter">
+                <option value="All">All Districts</option>
+            </select>
+        </div>
+
+        <div class="filter">
+            <label for="conflictFilter">Conflict Type</label>
+            <select id="conflictFilter">
+                <option value="All">All Conflict Types</option>
+            </select>
+        </div>
+
+        <div class="filter">
+            <label for="speciesFilter">Species</label>
+            <select id="speciesFilter">
+                <option value="All">All Species</option>
+            </select>
+        </div>
+
+        <div class="filter">
+            <label for="severityFilter">Severity</label>
+            <select id="severityFilter">
+                <option value="All">All Severity Levels</option>
+            </select>
+        </div>
+
+        <button id="resetFilters">Reset Filters</button>
+
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard">
+
+        <!-- MAP -->
+        <section class="map-container">
+
+            <h2>Conflict Map</h2>
+
+            <div id="map"></div>
+
+        </section>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <!-- STATISTICS -->
+            <section class="statistics">
+
+                <h2>Statistics</h2>
+
+                <div class="stat-card">
+                    <h3>Total Conflict Events</h3>
+                    <p id="totalEvents">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>High-Severity Events</h3>
+                    <p id="highSeverity">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Number of Species</h3>
+                    <p id="speciesCount">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Number of Districts</h3>
+                    <p id="districtCount">0</p>
+                </div>
+
+            </section>
+
+            <!-- CHARTS -->
+            <section class="charts">
+
+                <h2>Charts</h2>
+
+                <div class="chart-container">
+                    <h3>Conflict Types</h3>
+                    <canvas id="conflictChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Species</h3>
+                    <canvas id="speciesChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Severity</h3>
+                    <canvas id="severityChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Districts</h3>
+                    <canvas id="districtChart"></canvas>
+                </div>
+
+            </section>
+
+        </aside>
+
+    </main>
+
+    <!-- Leaflet JavaScript -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+    <!-- Chart.js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+    <!-- Our JavaScript -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>
