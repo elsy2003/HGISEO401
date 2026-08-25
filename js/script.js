@@ -1,6 +1,6 @@
 // ---- CONFIG ----
 // Path is relative, so it works both locally and on Netlify
-const GEOJSON_URL = "data/Hwange_conflictdata.geojson";
+const GEOJSON_URL = "data/Hwange_conflictdata.geojson","boundary.geojson";
 
 // ---- MAP INIT ----
 const map = L.map("map").setView([-17.8252, 31.0335], 6); // default: Zimbabwe, change as needed
