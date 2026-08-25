@@ -5,28 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geo Application - HGISEO401</title>
 
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <header>
     <h1>HGISEO401 Geo Application</h1>
-    <p>Interactive map powered by GeoJSON</p>
+    <p>Interactive map with toggleable layers</p>
   </header>
 
   <div id="map"></div>
+
+  <!-- Layer toggle panel -->
+  <div id="layer-control">
+    <h3>Layers</h3>
+    <label>
+      <input type="checkbox" id="toggle-boundary" checked>
+      Boundary
+    </label>
+    <label>
+      <input type="checkbox" id="toggle-roads" checked>
+      Roads
+    </label>
+    <label>
+      <input type="checkbox" id="toggle-rivers" checked>
+      Rivers
+    </label>
+	<label>
+      <input type="checkbox" id="toggle-Hwange_conflictdata" checked>
+      Hwange_conflictdata
+    </label>
+  </div>
 
   <div id="info-panel" class="hidden">
     <button id="close-panel">&times;</button>
     <div id="info-content"></div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="js/script.js"></script>
 </body>
 </html>

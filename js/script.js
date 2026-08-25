@@ -1,47 +1,62 @@
 // ---- CONFIG ----
+<<<<<<< HEAD
 // Path is relative, so it works both locally and on Netlify
 const GEOJSON_URL = "data/Hwange_conflictdata.geojson","boundary.geojson";
+=======
+const DATA_FILES = {
+  boundary: "data/boundary.json",
+  roads: "data/roads.json",
+  rivers: "data/rivers.json"
+  conflict: "data/Hwange_conflictdata.json"
+};
+>>>>>>> c233982 (Add rivers, roads, boundary layers with toggle controls)
 
 // ---- MAP INIT ----
-const map = L.map("map").setView([-17.8252, 31.0335], 6); // default: Zimbabwe, change as needed
+const map = L.map("map").setView([-17.8252, 31.0335], 6); // default: Zimbabwe, adjust as needed
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   maxZoom: 19
 }).addTo(map);
 
-// ---- STYLE FUNCTIONS ----
-function styleFeature(feature) {
-  return {
+// ---- STYLES PER LAYER TYPE ----
+const layerStyles = {
+  boundary: {
+    color: "#1e2327",
+    weight: 2,
+    fillColor: "#94a3b8",
+    fillOpacity: 0.05,
+    dashArray: "4"
+  },
+  roads: {
+    color: "#e67e22",
+    weight: 2,
+    fillOpacity: 0
+  },
+  rivers: {
     color: "#2563eb",
     weight: 2,
-    fillColor: "#3b82f6",
-    fillOpacity: 0.4
-  };
-}
-
-function pointToLayer(feature, latlng) {
-  return L.circleMarker(latlng, {
-    radius: 6,
-    fillColor: "#e11d48",
-    color: "#fff",
-    weight: 1,
-    fillOpacity: 0.9
-  });
-}
+    fillOpacity: 0
+  },
+  conflict: {
+    color: "#FF0000",
+    weight: 2,
+    fillOpacity: 0
+  }
+};
 
 // ---- INFO PANEL ----
 const infoPanel = document.getElementById("info-panel");
 const infoContent = document.getElementById("info-content");
 const closePanelBtn = document.getElementById("close-panel");
 
-function showInfo(properties) {
+function showInfo(properties, layerName) {
   let rows = "";
   for (const key in properties) {
     rows += `<tr><td>${key}</td><td>${properties[key]}</td></tr>`;
   }
   infoContent.innerHTML = `
-    <h2>${properties.name || "Feature Details"}</h2>
+    <h2>${properties.name || layerName}</h2>
     <table>${rows}</table>
   `;
   infoPanel.classList.remove("hidden");
@@ -51,40 +66,85 @@ closePanelBtn.addEventListener("click", () => {
   infoPanel.classList.add("hidden");
 });
 
-// ---- FETCH + RENDER GEOJSON ----
-async function loadGeoJSON() {
+// ---- STORE LOADED LAYERS ----
+const layers = {}; // e.g. layers.boundary = L.geoJSON(...)
+
+// ---- LOAD A SINGLE GEOJSON FILE AND ADD AS A LAYER ----
+async function loadLayer(name, url) {
   try {
-    const response = await fetch(GEOJSON_URL);
+    const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Failed to load GeoJSON: ${response.status}`);
+      throw new Error(`Failed to load ${name}: ${response.status}`);
     }
     const geoData = await response.json();
 
     const geoLayer = L.geoJSON(geoData, {
-      style: styleFeature,
-      pointToLayer: pointToLayer,
+      style: () => layerStyles[name],
+      pointToLayer: (feature, latlng) =>
+        L.circleMarker(latlng, {
+          radius: 5,
+          fillColor: layerStyles[name].color,
+          color: "#fff",
+          weight: 1,
+          fillOpacity: 0.9
+        }),
       onEachFeature: (feature, layer) => {
         layer.on("click", () => {
           if (feature.properties) {
-            showInfo(feature.properties);
+            showInfo(feature.properties, name);
           }
         });
-
         if (feature.properties && feature.properties.name) {
           layer.bindTooltip(feature.properties.name, { sticky: true });
         }
       }
-    }).addTo(map);
+    });
 
-    // Zoom map to fit the loaded data
-    if (geoLayer.getBounds().isValid()) {
-      map.fitBounds(geoLayer.getBounds(), { padding: [30, 30] });
-    }
+    layers[name] = geoLayer;
+    geoLayer.addTo(map); // visible by default, matches checked checkboxes
+
+    return geoLayer;
   } catch (error) {
     console.error(error);
-    infoContent.innerHTML = `<p style="color:red;">Could not load map data. Check that data/data.geojson exists and is valid.</p>`;
-    infoPanel.classList.remove("hidden");
+    return null;
   }
 }
 
+<<<<<<< HEAD
 loadGeoJSON();
+=======
+// ---- LOAD ALL LAYERS, THEN FIT MAP TO COMBINED BOUNDS ----
+async function loadAllLayers() {
+  const loadPromises = Object.entries(DATA_FILES).map(([name, url]) =>
+    loadLayer(name, url)
+  );
+
+  const loadedLayers = await Promise.all(loadPromises);
+
+  const group = L.featureGroup(loadedLayers.filter(l => l !== null));
+  if (group.getLayers().length > 0) {
+    map.fitBounds(group.getBounds(), { padding: [30, 30] });
+  }
+}
+
+loadAllLayers();
+
+// ---- TOGGLE CONTROLS ----
+function setupToggle(checkboxId, layerName) {
+  const checkbox = document.getElementById(checkboxId);
+  checkbox.addEventListener("change", (e) => {
+    const layer = layers[layerName];
+    if (!layer) return; // not loaded yet or failed to load
+
+    if (e.target.checked) {
+      map.addLayer(layer);
+    } else {
+      map.removeLayer(layer);
+    }
+  });
+}
+
+setupToggle("toggle-boundary", "boundary");
+setupToggle("toggle-roads", "roads");
+setupToggle("toggle-rivers", "rivers");
+>>>>>>> c233982 (Add rivers, roads, boundary layers with toggle controls)

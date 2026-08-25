@@ -28,6 +28,38 @@ header p {
   z-index: 1;
 }
 
+/* Layer toggle panel */
+#layer-control {
+  position: absolute;
+  top: 90px;
+  left: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  padding: 1rem 1.2rem;
+  z-index: 1000;
+  font-size: 0.9rem;
+}
+
+#layer-control h3 {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  color: #1e2327;
+}
+
+#layer-control label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+}
+
+#layer-control input {
+  cursor: pointer;
+}
+
+/* Info panel */
 #info-panel {
   position: absolute;
   top: 90px;
@@ -76,4 +108,13 @@ header p {
 #info-content td:first-child {
   font-weight: 600;
   width: 40%;
+}
+
+/* Legend swatches (optional, shown next to labels) */
+.legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  margin-right: 4px;
 }
