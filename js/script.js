@@ -7,7 +7,7 @@ const DATA_FILES = {
 };
 
 // ---- MAP INIT ----
-const map = L.map("map").setView([-17.8252, 31.0335], 6); // default: Zimbabwe, adjust as needed
+const map = L.map("map").setView([-18.6, 26.5], 9); // Hwange National Park
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
