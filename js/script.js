@@ -1,15 +1,10 @@
 // ---- CONFIG ----
-<<<<<<< HEAD
-// Path is relative, so it works both locally and on Netlify
-const GEOJSON_URL = "data/Hwange_conflictdata.geojson","boundary.geojson";
-=======
 const DATA_FILES = {
-  boundary: "data/boundary.json",
-  roads: "data/roads.json",
-  rivers: "data/rivers.json"
-  conflict: "data/Hwange_conflictdata.json"
+  boundary: "data/boundary.geojson",
+  roads: "data/roads.geojson",
+  rivers: "data/rivers.geojson",
+  conflict: "data/Hwange_conflictdata.geojson"
 };
->>>>>>> c233982 (Add rivers, roads, boundary layers with toggle controls)
 
 // ---- MAP INIT ----
 const map = L.map("map").setView([-17.8252, 31.0335], 6); // default: Zimbabwe, adjust as needed
@@ -39,7 +34,7 @@ const layerStyles = {
     fillOpacity: 0
   },
   conflict: {
-    color: "#FF0000",
+    color: "#ff0000",
     weight: 2,
     fillOpacity: 0
   }
@@ -110,9 +105,6 @@ async function loadLayer(name, url) {
   }
 }
 
-<<<<<<< HEAD
-loadGeoJSON();
-=======
 // ---- LOAD ALL LAYERS, THEN FIT MAP TO COMBINED BOUNDS ----
 async function loadAllLayers() {
   const loadPromises = Object.entries(DATA_FILES).map(([name, url]) =>
@@ -132,6 +124,8 @@ loadAllLayers();
 // ---- TOGGLE CONTROLS ----
 function setupToggle(checkboxId, layerName) {
   const checkbox = document.getElementById(checkboxId);
+  if (!checkbox) return; // guard in case an HTML id doesn't match
+
   checkbox.addEventListener("change", (e) => {
     const layer = layers[layerName];
     if (!layer) return; // not loaded yet or failed to load
@@ -147,4 +141,4 @@ function setupToggle(checkboxId, layerName) {
 setupToggle("toggle-boundary", "boundary");
 setupToggle("toggle-roads", "roads");
 setupToggle("toggle-rivers", "rivers");
->>>>>>> c233982 (Add rivers, roads, boundary layers with toggle controls)
+setupToggle("toggle-Hwange_conflictdata", "conflict");
