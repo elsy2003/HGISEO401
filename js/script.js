@@ -375,7 +375,7 @@ function displayConflicts(features) {
                     latlng,
                     {
                         pane: "conflictPane",
-                        radius: 7,
+                        radius: 4,
                         color: "#8b0000",
                         weight: 2,
                         fillColor: "#ff0000",
