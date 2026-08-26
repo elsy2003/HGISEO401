@@ -49,8 +49,6 @@ let conflictLayer = null;
 
 let conflictChart = null;
 let speciesChart = null;
-let severityChart = null;
-let districtChart = null;
 
 let layerControl = null;
 
@@ -344,18 +342,15 @@ function getFilteredFeatures() {
 
 function displayConflicts(features) {
 
-    // Check whether the conflict layer is currently visible
     const wasVisible =
         conflictLayer
             ? map.hasLayer(conflictLayer)
             : true;
 
-
     // Remove the old conflict layer
     if (conflictLayer) {
         map.removeLayer(conflictLayer);
     }
-
 
     // Create the new filtered conflict layer
     conflictLayer = L.geoJSON(
@@ -364,9 +359,7 @@ function displayConflicts(features) {
             features: features
         },
         {
-            // Put conflict points in the higher pane
             pane: "conflictPane",
-
 
             // Create point symbols
             pointToLayer: function(feature, latlng) {
@@ -383,7 +376,6 @@ function displayConflicts(features) {
                     }
                 );
             },
-
 
             // Create point popups
             onEachFeature: function(feature, layer) {
@@ -443,12 +435,10 @@ function displayConflicts(features) {
         }
     );
 
-
     // Add the new layer only if it was visible
     if (wasVisible) {
         conflictLayer.addTo(map);
     }
-
 
     // Refresh the layer control
     updateLayerControl();
@@ -468,20 +458,6 @@ function updateStatistics(features) {
         features.length;
 
 
-    // High-severity events
-    const highSeverity =
-        features.filter(feature =>
-            String(
-                feature.properties.Severity
-            ).toLowerCase() === "high"
-        ).length;
-
-    document.getElementById(
-        "highSeverity"
-    ).textContent =
-        highSeverity;
-
-
     // Number of species
     const species = new Set(
         features
@@ -495,21 +471,6 @@ function updateStatistics(features) {
         "speciesCount"
     ).textContent =
         species.size;
-
-
-    // Number of districts
-    const districts = new Set(
-        features
-            .map(feature =>
-                feature.properties.District
-            )
-            .filter(Boolean)
-    );
-
-    document.getElementById(
-        "districtCount"
-    ).textContent =
-        districts.size;
 }
 
 
@@ -557,20 +518,17 @@ function createChart(
         existingChart.destroy();
     }
 
-
     const labels =
         Object.keys(dataCounts);
 
     const values =
         Object.values(dataCounts);
 
-
     const canvas =
         document.getElementById(chartId);
 
     const ctx =
         canvas.getContext("2d");
-
 
     return new Chart(ctx, {
 
@@ -611,7 +569,7 @@ function createChart(
 
 
 // =========================================
-// 17. UPDATE ALL CHARTS
+// 17. UPDATE REMAINING CHARTS
 // =========================================
 
 function updateCharts(features) {
@@ -628,18 +586,6 @@ function updateCharts(features) {
             "Species"
         );
 
-    const severityCounts =
-        countByProperty(
-            features,
-            "Severity"
-        );
-
-    const districtCounts =
-        countByProperty(
-            features,
-            "District"
-        );
-
 
     conflictChart = createChart(
         "conflictChart",
@@ -653,20 +599,6 @@ function updateCharts(features) {
         speciesChart,
         "Number of Events",
         speciesCounts
-    );
-
-    severityChart = createChart(
-        "severityChart",
-        severityChart,
-        "Number of Events",
-        severityCounts
-    );
-
-    districtChart = createChart(
-        "districtChart",
-        districtChart,
-        "Number of Events",
-        districtCounts
     );
 }
 
